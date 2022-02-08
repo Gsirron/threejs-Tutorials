@@ -13,13 +13,17 @@ const LControl = () => {
     }
   }, [dom, control])
   // @ts-ignore
-  return <OrbitControls ref={control} domElement={dom.current} />
+  return (
+    <OrbitControls ref={control} domElement={dom.current} enabled={false} />
+  )
 }
 const LCanvas = ({ children }) => {
   const dom = useStore((state) => state.dom)
 
   return (
     <Canvas
+      orthographic
+      camera={{ zoom: 20 }}
       mode='concurrent'
       style={{
         position: 'absolute',
