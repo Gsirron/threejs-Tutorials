@@ -1,3 +1,4 @@
+import { Html } from '@react-three/drei'
 import dynamic from 'next/dynamic'
 // Step 5 - delete Instructions components
 // import Shader from '@/components/canvas/Shader/Shader'
@@ -26,6 +27,7 @@ const R3F = () => {
   return (
     <>
       {/* <Shader /> */}
+
       <Dot />
       <color attach='background' args={['black']}></color>
     </>
