@@ -12,11 +12,13 @@ import { Html } from '@react-three/drei'
 const roundedSquareWave = (t, delta, a, f) => {
   return ((2 * a) / Math.PI) * Math.atan(Math.sin(2 * Math.PI * t * f) / delta)
 }
-const Dot = () => {
+const Dot = (props) => {
   const ref: any = useRef()
+  const [active, setActive] = useState(false)
   const { vec, transform, positions, distances } = useMemo(() => {
     const vec = new THREE.Vector3()
     const transform = new THREE.Matrix4()
+
     const positions = [...Array(10000)].map((_, i) => {
       const position = new THREE.Vector3()
       // Place in a grid
@@ -32,12 +34,13 @@ const Dot = () => {
       return position
     })
     const right = new THREE.Vector3(1, 0, 0)
+
     const distances = positions.map((pos) => {
       return pos.length() + Math.cos(pos.angleTo(right) * 8) * 0.5
     })
     return { vec, transform, positions, distances }
   }, [])
-  useFrame(({ clock }) => {
+  useFrame(({ clock }, active) => {
     const wave = roundedSquareWave(clock.elapsedTime, 0.1, 1, 1 / 3)
     const scale = 1 + wave * 0.3
     for (let i = 0; i < 10000; ++i) {
@@ -62,11 +65,6 @@ const Dot = () => {
   })
   return (
     <instancedMesh ref={ref} args={[null, null, 10000]}>
-      <Html>
-        <div className='w-96 h-96 place-content-center'>
-          <h1 className='text-5xl  font-bold text-white'>THIS PLACE</h1>
-        </div>
-      </Html>
       <circleBufferGeometry args={[0.15]} />
       <meshBasicMaterial />
     </instancedMesh>

@@ -1,5 +1,7 @@
 import { Html } from '@react-three/drei'
 import dynamic from 'next/dynamic'
+import { Suspense } from 'react'
+import { DirectionalLight } from 'three'
 // Step 5 - delete Instructions components
 // import Shader from '@/components/canvas/Shader/Shader'
 
@@ -11,14 +13,26 @@ const Shader = dynamic(() => import('../components/canvas/Shader/Shader'), {
   ssr: false,
 })
 const Dot = dynamic(() => import('../components/canvas/Dot/Dot'), {
-  ssr: false,
+  ssr: true,
+})
+const MusicBar = dynamic(
+  () => import('@/components/canvas/Musicbar/MusicBar'),
+  {
+    ssr: true,
+  }
+)
+const CubeArray = dynamic(() => import('@/components/canvas/Cube/CubeArray'), {
+  ssr: true,
 })
 
 // dom components goes here
 const DOM = () => {
   return (
-    // Step 5 - delete Instructions components
-    <div>hi</div>
+    <div className='container mx-auto px-10 content-center'>
+      <div className='flex justify-center items-center h-screen'>
+        {/* <h1 className='text-5xl  font-bold text-white'>You Start Now!</h1> */}
+      </div>
+    </div>
   )
 }
 
@@ -27,9 +41,26 @@ const R3F = () => {
   return (
     <>
       {/* <Shader /> */}
-
-      <Dot />
-      <color attach='background' args={['black']}></color>
+      <directionalLight
+        intensity={0.6}
+        position={[1, 2, 2]}
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
+        castShadow
+      />
+      <spotLight
+        position={[-4, 4, -4]}
+        angle={0.06}
+        penumbra={1}
+        castShadow
+        shadow-mapSize={[2048, 2048]}
+      />
+      <Suspense fallback={null}>
+        {/* <MusicBar url='/music/df-around.mp3' /> */}
+        {/* <Dot /> */}
+        <CubeArray url='/music/df-around.mp3' />
+      </Suspense>
+      <color attach='background' args={['white']}></color>
     </>
   )
 }

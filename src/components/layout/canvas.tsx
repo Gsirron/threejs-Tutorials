@@ -20,8 +20,7 @@ const LCanvas = ({ children }) => {
 
   return (
     <Canvas
-      orthographic
-      camera={{ zoom: 20 }}
+      camera={{ position: [10, 10, 40], near: 5, far: 100 }}
       mode='concurrent'
       style={{
         position: 'absolute',
