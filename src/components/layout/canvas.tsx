@@ -20,12 +20,8 @@ const LCanvas = ({ children }) => {
 
   return (
     <Canvas
-      camera={{ position: [10, 10, 40], near: 5, far: 100 }}
+      camera={{ position: [5, 5, 10], near: 2, far: 30 }}
       mode='concurrent'
-      style={{
-        position: 'absolute',
-        top: 0,
-      }}
       onCreated={(state) => state.events.connect(dom.current)}
     >
       <LControl />
