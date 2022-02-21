@@ -52,19 +52,13 @@ const R3F = () => {
         shadow-mapSize-height={2048}
         castShadow
       />
-      <spotLight
-        position={[-4, 4, -4]}
-        angle={0.06}
-        penumbra={1}
-        castShadow
-        shadow-mapSize={[2048, 2048]}
-      />
+
       <CubVis />
-      {/* <Suspense fallback={null}> */}
-      {/* <MusicBar url='/music/df-around.mp3' /> */}
-      {/* <Dot /> */}
-      {/* <CubeArray url='/music/df-around.mp3' />
-      </Suspense> */}
+      <Suspense fallback={null}>
+        {/* <MusicBar url='/music/df-around.mp3' /> */}
+        {/* <Dot /> */}
+        {/* <CubeArray url='/music/df-around.mp3' /> */}
+      </Suspense>
       <color attach='background' args={['white']}></color>
       <gridHelper />
     </>

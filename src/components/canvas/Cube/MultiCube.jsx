@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { Suspense, useEffect, useRef } from 'react'
+import React, { useEffect, useLayoutEffect, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useAsset } from 'use-asset'
 
@@ -41,18 +41,16 @@ async function createAudio(url) {
   }
 }
 
-const MusicBar = ({
+const MultiCube = ({
   url,
-  y = 200,
-  space = 1.2,
-  width = 0.2,
-  height = 0.5,
+  y = 1000,
+  space = 0.1,
+  width = 0.02,
+  height = 0.05,
   obj = new THREE.Object3D(),
   ...props
 }) => {
   const ref = useRef()
-  // use-asset is the library that r3f uses internally for useLoader. It caches promises and
-  // integrates them with React suspense. You can use it as-is with or without r3f.
   const { gain, context, update, data } = useAsset(() => createAudio(url), url)
   useEffect(() => {
     // Connect the gain node, which plays the audio
@@ -64,31 +62,29 @@ const MusicBar = ({
   useFrame((state) => {
     let avg = update()
     // Distribute the instanced planes according to the frequency daza
-    for (let i = 0; i < data.length; i++) {
-      obj.position.set(
-        i * width * space - (data.length * width * space) / 2,
-        data[i] / y,
-        0
-      )
-      obj.updateMatrix()
-      ref.current.setMatrixAt(i, obj.matrix)
-    }
+    const transform = new THREE.Matrix4()
+    let i = 0
+    for (let x = 0; x < data.length; ++x)
+      for (let y = 0; y < 2; ++y)
+        for (let z = 0; z < data.length; ++z) {
+          let space2 = Math.sin(data[z] / 100)
+          const id = i++
+          const x2 = x * space
+          const y2 = (data[x] / 50) * space
+          const z2 = z * space
+          transform.setPosition(x2, y2, z2)
+          ref.current.setMatrixAt(id, transform)
+        }
     // Set the hue according to the frequency average
-    ref.current.material.color.setHSL(avg / 500, avg / 0.75, 0.75)
+    ref.current.material.color.setHSL(avg / 500, 0.75, 0.75)
     ref.current.instanceMatrix.needsUpdate = true
   })
   return (
-    <instancedMesh
-      castShadow
-      ref={ref}
-      args={[null, null, data.length]}
-      {...props}
-    >
-      <boxBufferGeometry args={[width, height, 0.05]} />
-      {/* <planeGeometry args={[width, height]} /> */}
-      <meshBasicMaterial toneMapped={false} />
+    <instancedMesh ref={ref} args={[null, null, Math.pow(data.length, 3)]}>
+      <boxBufferGeometry args={[0.15, 0.15, 0.15]} />
+      <meshPhongMaterial color='red' opacity={0.9} transparent />
     </instancedMesh>
   )
 }
 
-export default MusicBar
+export default CubeArray

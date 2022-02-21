@@ -44,7 +44,7 @@ async function createAudio(url) {
 const CubeArray = ({
   url,
   y = 1000,
-  space = 0.7,
+  space = 0.1,
   width = 0.02,
   height = 0.05,
   obj = new THREE.Object3D(),
@@ -65,14 +65,14 @@ const CubeArray = ({
     const transform = new THREE.Matrix4()
     let i = 0
     for (let x = 0; x < data.length; ++x)
-      for (let y = 0; y < data.length; ++y)
+      for (let y = 0; y < 2; ++y)
         for (let z = 0; z < data.length; ++z) {
           let space2 = Math.sin(data[z] / 100)
           const id = i++
-          const x2 = x * space * Math.sin(data[x] / 100)
-          const y2 = y * space * Math.sin(data[y] / 100)
-          const z2 = z * space * Math.sin(data[z] / 100)
-          transform.setPosition(5 - x2, 5 - y2, 5 - z2)
+          const x2 = x * space
+          const y2 = (data[x] / 50) * space
+          const z2 = z * space
+          transform.setPosition(x2, y2, z2)
           ref.current.setMatrixAt(id, transform)
         }
     // Set the hue according to the frequency average
@@ -97,7 +97,7 @@ const CubeArray = ({
 
   return (
     <instancedMesh ref={ref} args={[null, null, Math.pow(data.length, 3)]}>
-      <boxBufferGeometry args={[0.5, 0.5, 0.5]} />
+      <boxBufferGeometry args={[0.15, 0.15, 0.15]} />
       <meshPhongMaterial color='red' opacity={0.9} transparent />
     </instancedMesh>
   )
