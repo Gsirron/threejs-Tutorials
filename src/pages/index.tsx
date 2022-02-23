@@ -36,6 +36,12 @@ const VisualCubeArray = dynamic(
     ssr: true,
   }
 )
+const PlanetGroup = dynamic(
+  () => import('@/components/canvas/Planet/PlanetGroup'),
+  {
+    ssr: true,
+  }
+)
 // dom components goes here
 const DOM = () => {
   return (
@@ -58,7 +64,8 @@ const R3F = () => {
 
       {/* <CubVis /> */}
       <ambientLight />
-      <VisualCubeArray />
+      <PlanetGroup />
+      {/* <VisualCubeArray /> */}
       <Suspense fallback={null}>
         {/* <MusicBar url='/music/df-around.mp3' /> */}
         {/* <Dot /> */}
