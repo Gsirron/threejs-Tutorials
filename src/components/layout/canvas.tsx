@@ -13,14 +13,16 @@ const LControl = () => {
     }
   }, [dom, control])
   // @ts-ignore
-  return <OrbitControls ref={control} domElement={dom.current} />
+  return (
+    <OrbitControls ref={control} domElement={dom.current} enablePan={false} />
+  )
 }
 const LCanvas = ({ children }) => {
   const dom = useStore((state) => state.dom)
 
   return (
     <Canvas
-      camera={{ position: [5, 5, 10], near: 2, far: 30 }}
+      camera={{ position: [0, 0, 0.1] }}
       mode='concurrent'
       onCreated={(state) => state.events.connect(dom.current)}
     >

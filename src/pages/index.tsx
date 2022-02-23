@@ -27,6 +27,15 @@ const MusicBar = dynamic(
 const CubeArray = dynamic(() => import('@/components/canvas/Cube/CubeArray'), {
   ssr: true,
 })
+const MultiCube = dynamic(() => import('@/components/canvas/Cube/MultiCube'), {
+  ssr: true,
+})
+const VisualCubeArray = dynamic(
+  () => import('@/components/canvas/Cube/VisualCubeArray'),
+  {
+    ssr: true,
+  }
+)
 // dom components goes here
 const DOM = () => {
   return (
@@ -47,13 +56,14 @@ const R3F = () => {
       {/* <Shader /> */}
       <directionalLight
         intensity={0.6}
-        position={[1, 2, 2]}
+        position={[150, 150, 150]}
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
         castShadow
       />
 
-      <CubVis />
+      {/* <CubVis /> */}
+      <VisualCubeArray />
       <Suspense fallback={null}>
         {/* <MusicBar url='/music/df-around.mp3' /> */}
         {/* <Dot /> */}

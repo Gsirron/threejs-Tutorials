@@ -2,7 +2,6 @@ import * as THREE from 'three'
 import React, { useEffect, useLayoutEffect, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useAsset } from 'use-asset'
-import BasicCube from './BasicCube'
 
 async function createAudio(url) {
   // Fetch audio data and create a buffer source
@@ -42,23 +41,38 @@ async function createAudio(url) {
   }
 }
 
-const MultiCube = ({
-  // url,
-  // y = 1000,
-  // space = 0.1,
-  // width = 0.02,
-  // height = 0.05,
-  // obj = new THREE.Object3D(),
+const VisualCubeArray = ({
+  space = 0.5,
+  size = 30,
+  obj = new THREE.Object3D(),
   ...props
 }) => {
   const ref = useRef()
 
+  useFrame(({ clock }) => {
+    let i = 0
+    for (let index = 0; index < Math.pow(size, 3); index++) {
+      const x = (index % size) * space
+      const y = (Math.floor(index / size) % size) * space
+
+      if (index % Math.pow(size, 2) == 0 && index > 0) {
+        i++
+      }
+      const t = ((clock.elapsedTime + 3) % 5) * 0.3
+      const z = i * space
+      obj.position.set(4 - x, 4.5 - y - t, 4 - z)
+      obj.updateMatrix()
+      ref.current.setMatrixAt(index, obj.matrix)
+    }
+    ref.current.instanceMatrix.needsUpdate = true
+  })
+
   return (
-    <group ref={ref}>
-      <BasicCube position={[2, 1, 0]} />
-      <BasicCube position={[-2, 1, 0]} />
-    </group>
+    <instancedMesh ref={ref} args={[null, null, Math.pow(50, 3)]}>
+      <boxBufferGeometry args={[0.15, 0.15, 0.15]} />
+      <meshPhongMaterial color='red' opacity={0.9} transparent />
+    </instancedMesh>
   )
 }
 
-export default MultiCube
+export default VisualCubeArray
