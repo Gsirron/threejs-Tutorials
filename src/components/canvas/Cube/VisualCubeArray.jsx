@@ -1,54 +1,60 @@
 import * as THREE from 'three'
-import React, { useEffect, useLayoutEffect, useRef } from 'react'
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useMemo,
+  useState,
+} from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useAsset } from 'use-asset'
+import niceColors from 'nice-color-palettes'
 
-async function createAudio(url) {
-  // Fetch audio data and create a buffer source
-  const res = await fetch(url)
-  const buffer = await res.arrayBuffer()
-  const context = new (window.AudioContext || window.webkitAudioContext)()
-  const source = context.createBufferSource()
-  source.buffer = await new Promise((res) =>
-    context.decodeAudioData(buffer, res)
-  )
-  source.loop = true
-  // This is why it doesn't run in Safari 🍏🐛. Start has to be called in an onClick event
-  // which makes it too awkward for a little demo since you need to load the async data first
-  source.start(0)
-  // Create gain node and an analyser
-  const gain = context.createGain()
-  const analyser = context.createAnalyser()
-  analyser.fftSize = 64
-  source.connect(analyser)
-  analyser.connect(gain)
-  // The data array receive the audio frequencies
-  const data = new Uint8Array(analyser.frequencyBinCount)
-  return {
-    context,
-    source,
-    gain,
-    data,
-    // This function gets called every frame per audio source
-    update: () => {
-      analyser.getByteFrequencyData(data)
-      // Calculate a frequency average
-      return (data.avg = data.reduce(
-        (prev, cur) => prev + cur / data.length,
-        0
-      ))
-    },
-  }
-}
-
-const VisualCubeArray = ({
-  space = 0.5,
-  size = 30,
-  obj = new THREE.Object3D(),
-  ...props
-}) => {
+const VisualCubeArray = ({ space = 0.5, size = 20 }) => {
   const ref = useRef()
+  const dummy = useMemo(() => new THREE.Object3D(), [])
+  const obj = new THREE.Object3D()
+  const tempColor = new THREE.Color()
+  const length = Math.pow(size, 3)
+  const data = Array.from({ length }, () => ({
+    color: niceColors[17][Math.floor(Math.random() * 5)],
+    scale: 1,
+  }))
+  const colorArray = useMemo(
+    () =>
+      Float32Array.from(
+        new Array(length)
+          .fill()
+          .flatMap((_, i) => tempColor.set(data[i].color).toArray())
+      ),
+    []
+  )
 
+  // const cubeField = useMemo(() => {
+  //   let i = 0
+  //   const temp = []
+  //   for (let index = 0; index < Math.pow(size, 3); index++) {
+  //     const x = (index % size) * space
+  //     const y = (Math.floor(index / size) % size) * space
+  //     if (index % Math.pow(size, 2) == 0 && index > 0) {
+  //       i++
+  //     }
+  //     const z = i * space
+  //     temp.push({ x, y, z })
+  //   }
+  //   return temp
+  // }, [size, space])
+  // useFrame(({ clock }) => {
+  //   cubeField.forEach((cube, i) => {
+  //     let { x, y, z } = cube
+  //     const t = ((clock.elapsedTime + 3) % 5) * 0.3
+
+  //     dummy.position.set(5 - x, 5 - y + t, 5 - z)
+  //     dummy.updateMatrix()
+  //     ref.current.setMatrixAt(i, dummy.matrix)
+  //   })
+  //   ref.current.instanceMatrix.needsUpdate = true
+  // })
   useFrame(({ clock }) => {
     let i = 0
     for (let index = 0; index < Math.pow(size, 3); index++) {
@@ -68,9 +74,14 @@ const VisualCubeArray = ({
   })
 
   return (
-    <instancedMesh ref={ref} args={[null, null, Math.pow(50, 3)]}>
-      <boxBufferGeometry args={[0.15, 0.15, 0.15]} />
-      <meshPhongMaterial color='red' opacity={0.9} transparent />
+    <instancedMesh ref={ref} args={[null, null, Math.pow(size, 3)]}>
+      <boxBufferGeometry args={[0.15, 0.15, 0.15]}>
+        <instancedBufferAttribute
+          attachObject={['attributes', 'color']}
+          args={[colorArray, 3]}
+        />
+      </boxBufferGeometry>
+      <meshPhongMaterial vertexColors={THREE.VertexColors} />
     </instancedMesh>
   )
 }

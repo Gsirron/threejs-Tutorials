@@ -54,15 +54,10 @@ const R3F = () => {
   return (
     <>
       {/* <Shader /> */}
-      <directionalLight
-        intensity={0.6}
-        position={[150, 150, 150]}
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-        castShadow
-      />
+      <directionalLight intensity={0.6} position={[150, 150, 150]} />
 
       {/* <CubVis /> */}
+      <ambientLight />
       <VisualCubeArray />
       <Suspense fallback={null}>
         {/* <MusicBar url='/music/df-around.mp3' /> */}
