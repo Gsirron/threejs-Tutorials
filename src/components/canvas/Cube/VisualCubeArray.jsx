@@ -64,9 +64,10 @@ const VisualCubeArray = ({ space = 0.5, size = 20 }) => {
       if (index % Math.pow(size, 2) == 0 && index > 0) {
         i++
       }
-      const t = ((clock.elapsedTime + 3) % 5) * 0.3
+      // const t = ((clock.elapsedTime + 3) % 5) * 0.3
+      const t = Math.sin(clock.getElapsedTime()) * 2
       const z = i * space
-      obj.position.set(4 - x, 4.5 - y - t, 4 - z)
+      obj.position.set(4 - x, 4.5 - y, 4 - z)
       obj.updateMatrix()
       ref.current.setMatrixAt(index, obj.matrix)
     }
