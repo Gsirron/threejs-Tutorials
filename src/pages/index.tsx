@@ -64,9 +64,9 @@ const R3F = () => {
 
       {/* <CubVis /> */}
       <ambientLight />
-      <PlanetGroup />
       {/* <VisualCubeArray /> */}
       <Suspense fallback={null}>
+        <PlanetGroup />
         {/* <MusicBar url='/music/df-around.mp3' /> */}
         {/* <Dot /> */}
         {/* <CubeArray url='/music/df-around.mp3' /> */}

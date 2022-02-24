@@ -14,7 +14,12 @@ const LControl = () => {
   }, [dom, control])
   // @ts-ignore
   return (
-    <OrbitControls ref={control} domElement={dom.current} enablePan={false} />
+    <OrbitControls
+      ref={control}
+      domElement={dom.current}
+      enablePan={false}
+      autoRotate
+    />
   )
 }
 const LCanvas = ({ children }) => {

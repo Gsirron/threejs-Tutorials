@@ -13,9 +13,9 @@ const PlanetGroup = () => {
 
   return (
     <group ref={groupRef} position={[0, 0, 0]}>
-      <PlanetRings rad={2.1} position={[0, 1, 0]} />
-      <PlanetRings rad={2.1} position={[0, -1, 0]} />
-      <PlanetRings rad={2.7} />
+      <PlanetRings rad={3.2} position={[0, 1, 0]} />
+      <PlanetRings rad={3.2} position={[0, -1, 0]} />
+      <PlanetRings rad={3.7} />
       {/* <PlanetRings /> */}
       <Planet />
     </group>
