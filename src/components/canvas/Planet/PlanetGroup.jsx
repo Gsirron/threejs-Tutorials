@@ -7,9 +7,18 @@ import React, {
   useMemo,
   useState,
 } from 'react'
+import { useFrame } from '@react-three/fiber'
+import * as THREE from 'three'
 
 const PlanetGroup = () => {
   const groupRef = useRef()
+  const ringRef1 = useRef()
+  const ringRef2 = useRef()
+  const obj = new THREE.Object3D()
+
+  useFrame(({ clock }) => {
+    const t = Math.sin(clock.getElapsedTime)
+  })
 
   return (
     <group ref={groupRef} position={[0, 0, 0]}>

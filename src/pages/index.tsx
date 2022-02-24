@@ -71,7 +71,7 @@ const R3F = () => {
         {/* <Dot /> */}
         {/* <CubeArray url='/music/df-around.mp3' /> */}
       </Suspense>
-      <color attach='background' args={['white']}></color>
+      <color attach='background' args={['black']}></color>
       <gridHelper />
     </>
   )
