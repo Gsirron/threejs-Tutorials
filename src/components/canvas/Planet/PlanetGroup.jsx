@@ -20,8 +20,10 @@ const PlanetGroup = () => {
 
   useFrame(({ clock }) => {
     const t = Math.sin(clock.getElapsedTime())
+    const t2 = Math.cos(clock.getElapsedTime())
 
-    ringRef1.current.position.y = t + 1
+    ringRef1.current.position.y = 1 + t + 1
+    ringRef2.current.position.y = -1 + t - 1
   })
 
   return (

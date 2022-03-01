@@ -27,7 +27,7 @@ const VisualCubeArray = ({ space = 0.5, size = 20 }) => {
           .fill()
           .flatMap((_, i) => tempColor.set(data[i].color).toArray())
       ),
-    []
+    [length, data, tempColor]
   )
 
   // const cubeField = useMemo(() => {
